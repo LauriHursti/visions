@@ -1,0 +1,6 @@
+py/__pycache__
+py/libftpy.so
+build
+outputs/*.*
+symspell_data/corpus.txt
+symspell_data/name_set.pickle
