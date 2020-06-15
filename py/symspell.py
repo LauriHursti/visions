@@ -11,7 +11,7 @@ class SymSpellMTG(SymSpell):
     def _parse_words(self, text):
         # \W = Alphanumeric characters, including non-latin characters, umlaut characters and digits.
         # Also allow charactes '’,-_
-        matches = re.findall(r"(([^\W]|['’,-_])+)", text.lower())
+        matches = re.findall(r"(([^\W]|['’,-_])+)", text)
         matches = [match[0] for match in matches]
         return matches
 
@@ -51,7 +51,7 @@ def buildPartialNames(names):
         parts = name.split(sep)
         for i in range(len(parts)):
             selParts = parts[0:(i+1)]
-            joinedSelParts = sep.join(selParts).lower()
+            joinedSelParts = sep.join(selParts)
             collector.append(joinedSelParts)
     return set(collector)     
 
@@ -61,7 +61,7 @@ class SymspellMTGNames:
     CORPUS_PATH = "symspell_data/corpus.txt"
     NAME_SET_PATH = "symspell_data/name_set.pickle"
     cardNames = readNames(CARD_DATA_PATH)
-    cardNames = set(map(lambda name: name.lower(), cardNames))
+    cardNames = set(cardNames)
 
 
     def __init__(self):

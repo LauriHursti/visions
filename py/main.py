@@ -113,9 +113,8 @@ def recognize_card_names():
 
             prediction = lstm.read_image(cropped.transpose()) # Transpose to column major format
             if len(prediction) > 0:
-
                 # Add detection if there's a valid card name left after post processing
-                predStr = prediction.lower().lstrip()
+                predStr = prediction.lstrip()
                 if len(predStr) > 0:
                     corrected, _distance = sym.lookup(predStr)
                     if corrected != None:
