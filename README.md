@@ -60,11 +60,10 @@ pip install -r requirements.txt
 ```
 
 ## Recognize cards
-Now that the installation is complete, you can use ``py/main.py`` to recognize image from the ``inputs`` folder. Run 
+Now that the installation is complete, you can use ``py/main.py`` to process images from the ``inputs`` folder. Run 
 ```
 python py/main.py
 ``` 
-
 to process the sample inputs.
 
 ### Additional options
