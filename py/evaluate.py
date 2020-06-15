@@ -1,23 +1,17 @@
 import cv2
 from os import makedirs, path, removedirs
 import glob
-from database import findimagepaths, getGTCards, getGTPolysAndCards
 import numpy as np
 import random
 import io
 import crop
 import statistics
 import time
-from tabulate import tabulate
-import shutil
-
-from zipfile import ZipFile 
 
 from symspell import SymspellMTGNames
 from ctc_clf import CTCClf
 from draw_boxes import drawsegmentation
 from segment import getNameBoxes
-import pytesseract
 
 IMGS = 500
 COLORS = {

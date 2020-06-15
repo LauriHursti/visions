@@ -5,7 +5,6 @@ import numpy as np
 import io
 import argparse
 
-from tabulate import tabulate
 from symspell import SymspellMTGNames
 from lstm_reader import LSTMClf
 from detector import Detector
