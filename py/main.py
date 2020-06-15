@@ -11,6 +11,8 @@ from detector import Detector
 import crop
 
 IMGS = 500
+FT_INPUT_W = 1024
+FT_INPUT_H = 1024
 COLORS = {
  0: (230, 25, 75),
  1: (60, 180, 75),
@@ -47,7 +49,35 @@ def printImageOutputs(imgc, imName, labels_boxes):
     cv2.imwrite("outputs/" + imName + ".png", imgc)
 
 
-# Find all input images
+def makeSquare(img, grayScale=True):
+    if grayScale:
+        ih, iw = img.shape
+    else:
+        ih, iw, _d = img.shape      
+
+    if ih > iw:
+        scale = FT_INPUT_H / ih
+        newH = int(scale * ih)
+        newW = int(scale * iw)
+        imgResized = cv2.resize(img, dsize=(newW, newH))
+        imgResized = cv2.copyMakeBorder(imgResized, 0, 0, 0, FT_INPUT_W - newW, cv2.BORDER_CONSTANT, (255, 255, 255))
+    else:
+        scale = FT_INPUT_W / iw
+        newH = int(scale * ih)
+        newW = int(scale * iw)
+        imgResized = cv2.resize(img, dsize=(newW, newH))
+        imgResized = cv2.copyMakeBorder(imgResized, 0, FT_INPUT_H - newH, 0, 0, cv2.BORDER_CONSTANT, (255, 255, 255))
+
+    if (grayScale):
+        oh, ow = imgResized.shape
+    else:
+        oh, ow, _od = imgResized.shape
+
+    assert oh == FT_INPUT_H
+    assert ow == FT_INPUT_W
+    return imgResized
+
+
 def find_inputs():
     return glob.glob("inputs/*.*")
 
@@ -63,6 +93,8 @@ def recognize_card_names():
         _dir, imgName = path.split(imgPath)
         img = cv2.imread(str(imgPath), cv2.IMREAD_GRAYSCALE)
         imgc = cv2.imread(str(imgPath))
+        img = makeSquare(img)
+        imgc = makeSquare(imgc, grayScale=False)
         labels_boxes = detector.getNameBoxes(img, imgc)
 
         cards = []
