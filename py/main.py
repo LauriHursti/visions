@@ -130,7 +130,7 @@ def recognizeCardNames(inputFolder, outputFolder, printImages):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Process some integers.')
     parser.add_argument("--input", default="inputs", help="Folder that contains input images")
-    parser.add_argument("--printimages", default=1, help="Set to true if you want image outputs printed to the output folder")
+    parser.add_argument("--printimages", default=False, help="Set to true if you want image outputs printed to the output folder")
     parser.add_argument("--output", default="outputs", help="Folder where image outputs are written")
 
     args = parser.parse_args()
