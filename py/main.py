@@ -84,7 +84,7 @@ def findInputs(folder):
     return collector
 
 
-def recognizeCardNames(inputFolder, outputFolder, printImages):
+def recognizeCardNames(inputFolder, outputFolder, visualize):
     sym = SymspellMTGNames()
     lstm = LSTMClf()
     detector = Detector()
@@ -130,20 +130,20 @@ def recognizeCardNames(inputFolder, outputFolder, printImages):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Process some integers.')
     parser.add_argument("--input", default="inputs", help="Folder that contains input images")
-    parser.add_argument("--printimages", default=False, help="Set to true if you want image outputs printed to the output folder")
+    parser.add_argument("--visualize", default=0, help="Set to 1 if you want visualization outputs printed to the output folder")
     parser.add_argument("--output", default="outputs", help="Folder where image outputs are written")
 
     args = parser.parse_args()
     inputFolder = args.input
     outputFolder = args.output
-    printImages = bool(args.printimages)
+    visualize = bool(args.visualize)
 
-    if printImages:
+    if visualize:
         makedirs(outputFolder, exist_ok=True)
 
-    results = recognizeCardNames(inputFolder, outputFolder, printImages)
+    results = recognizeCardNames(inputFolder, outputFolder, visualize)
     for imgName, imgc, cards, boxes in results:
-        if printImages:
+        if visualize:
             outputPath = outputFolder + "/out_" + imgName
             imgc = drawBoxes(imgc, boxes, cards)
             cv2.imwrite(outputFolder + "/" + imgName, imgc)

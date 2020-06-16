@@ -71,15 +71,19 @@ Now that the installation is complete, you can use ``py/main.py`` to process ima
 ```
 python py/main.py
 ``` 
-to process the sample inputs. You can generate visual outputs similar to the images on top of this page by adding a ``--printimages 1`` command line argument. The generated images can be found in a folder called ``outputs``.
+to process the sample inputs. You can generate visual outputs similar to the images on top of this page by adding a ``--visualize 1`` command line argument:
+```
+python py/main.py --visualize 1
+```
+The generated images can be found in a folder called ``outputs``.
 
 ### Command line arguments
 
 | Parameter | Purpose | Example | Default value |
 | ----------| --------| ------- | ------- |
 | ``input`` | Specify input image folder | "inputs" |``python py/main --input my_input_folder`` |
-| ``printimages`` | Toggle on visualization output | 0 | ``python py/main --printimages 1`` |
-| ``output`` | Specify visualization output folder | "outputs" |``python py/main --printimages 1 --output my_output_folder`` |
+| ``visualize`` | Toggle on visualization output | 0 | ``python py/main --visualize 1`` |
+| ``output`` | Specify visualization output folder | "outputs" |``python py/main --visualize 1 --output my_output_folder`` |
 
 ## Future improvements
 
