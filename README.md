@@ -13,7 +13,7 @@ The recognition is done by first detecting and then reading the card names in th
 4. A [recurrent neural network](https://keras.io/examples/image_ocr/) containing an [LSTM unit](https://dl.acm.org/doi/10.1162/neco.1997.9.8.1735) is used to read the detected text.
 5. Language model that uses [SymSpell](https://medium.com/@wolfgarbe/1000x-faster-spelling-correction-algorithm-2012-8701fcd87a5f) to match raw results to card names is used to improve recognition results.
 
-This program is a constructive part of my master's thesis, which will be published some time during the summer of 2020. The thesis contains full details of the implementation *in Finnish*. A more detailed explanation in English might be added later as a GitHub page or in some other format.
+This program is a constructive part of my master's thesis, which will be published some time during the summer of 2020. The thesis contains full details of the implementation in Finnish. A more detailed explanation in English might be added later as a GitHub page or in some other format.
 
 Datasets used in training the neural network models will be published in a separate Git repository.
 
@@ -66,7 +66,7 @@ Now that the installation is complete, you can use ``py/main.py`` to process ima
 ```
 python py/main.py
 ``` 
-to process the sample inputs. You can get the visual outputs by adding a ``--printimages 1`` command line argument. An example can be found below.
+to process the sample inputs. You can get the visual outputs by adding a ``--printimages 1`` command line argument.
 
 ### Command line arguments
 
@@ -79,3 +79,4 @@ to process the sample inputs. You can get the visual outputs by adding a ``--pri
 ## Future improvements
 
 1. The most glaring issue of the implementation is that it *only recognizes cards with black text in names*. White text cards is the first improvement to be done. It should be possible to add the white text cards, by expanding the training data and tweaking the options of FASText.
+2. There's no unit tests. Unit tests would be useful for at least FASText code.
