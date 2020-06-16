@@ -1,6 +1,10 @@
 # Visions - MTG card name reader
 Recognize Magic: The Gathering (MTG) cards in images by detecting and recognizing their names.
 
+<a href="readme_imgs/1.jpg"><img src="readme_imgs/1.jpg" width="200" /></a>
+<a href="readme_imgs/2.jpg"><img src="readme_imgs/2.jpg" width="200" /></a>
+<a href="readme_imgs/3.jpg"><img src="readme_imgs/3.jpg" width="200" /></a>
+
 ## What is Visions and how does it work?
 
 Visions is a Python 3 and C++ program for recognizing Magic: The Gathering cards in images. The method currently recognizes only cards with black text in the name (modern and M15 frames). Expanding the programs to the classic white frame cards is the next big development for the program.
