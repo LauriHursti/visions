@@ -3,7 +3,7 @@ Recognize Magic: The Gathering (MTG) cards in images by detecting and recognizin
 
 ## What is Visions and how does it work?
 
-Visions is a Python 3 and C++ program for recognizing Magic: The Gathering in images. The method currently recognizes only cards with black text in the name (modern and M15 frames). Expanding the programs to the classic white frame cards is the next development for the program.
+Visions is a Python 3 and C++ program for recognizing Magic: The Gathering cards in images. The method currently recognizes only cards with black text in the name (modern and M15 frames). Expanding the programs to the classic white frame cards is the next big development for the program.
 
 The recognition is done by first detecting and then reading the card names in the image. The process can be split in five phases:
 
@@ -66,16 +66,16 @@ Now that the installation is complete, you can use ``py/main.py`` to process ima
 ```
 python py/main.py
 ``` 
-to process the sample inputs. You can get the visual outputs by adding a ``--printimages`` command line parameters. An example can be found below.
+to process the sample inputs. You can get the visual outputs by adding a ``--printimages 1`` command line argument. An example can be found below.
 
-### Command line parameters
+### Command line arguments
 
 | Parameter | Purpose | Example |
 | ----------| --------| ------- | 
 | ``input`` | Specify input image folder | ``python py/main --input my_input_folder`` |
-| ``printimages`` | Toggle on visualization output | ``python py/main --printimages`` |
+| ``printimages`` | Toggle on visualization output | ``python py/main --printimages 1`` |
 | ``output`` | Specify visualization output folder | ``python py/main --printimages --output my_output_folder`` |
 
 ## Future improvements
 
-The most glaring issue of the implementation is that it *only recognizes cards with black text color in names*. White text cards is the first improvement to be done. It should be possible to add the white text cards, by expanding the training data and tweaking the options of FASText.
+1. The most glaring issue of the implementation is that it *only recognizes cards with black text in names*. White text cards is the first improvement to be done. It should be possible to add the white text cards, by expanding the training data and tweaking the options of FASText.
