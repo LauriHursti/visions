@@ -7,7 +7,7 @@ Recognize Magic: The Gathering (MTG) cards in images by detecting and recognizin
 
 ## What is Visions and how does it work?
 
-Visions is a Python 3 and C++ program for recognizing Magic: The Gathering cards in images. The method currently recognizes only cards with black text in the name (modern and M15 frames). Expanding the programs to the classic white frame cards is the next big development for the program.
+Visions is a Python 3 and C++ program for recognizing Magic: The Gathering cards in images. The method currently recognizes only cards with black text in the name (modern and M15 frames). Expanding to classic white frame cards is the next big step for the program.
 
 The recognition is done by first detecting and then reading the card names in the image. The process can be split in five phases:
 
