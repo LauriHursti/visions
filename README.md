@@ -79,7 +79,7 @@ The generated images can be found in a folder called ``outputs``.
 
 ### Command line arguments
 
-| Parameter | Purpose | Example | Default value |
+| Parameter | Purpose | Default | Example |
 | ----------| --------| ------- | ------- |
 | ``input`` | Specify input image folder | "inputs" |``python py/main --input my_input_folder`` |
 | ``visualize`` | Toggle on visualization output | 0 | ``python py/main --visualize 1`` |
