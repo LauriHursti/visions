@@ -1,6 +1,6 @@
 absl-py==0.9.0
 astor==0.8.1
-gast==0.3.3
+gast==0.2.2
 google-pasta==0.2.0
 grpcio==1.29.0
 h5py==2.10.0
@@ -12,6 +12,7 @@ Keras-Preprocessing==1.1.2
 Markdown==3.2.2
 numpy==1.18.1
 opencv-python==4.2.0.34
+opt-einsum==3.2.1
 pkg-resources==0.0.0
 protobuf==3.12.2
 PyYAML==5.3.1
@@ -19,9 +20,9 @@ scikit-learn==0.23.1
 scipy==1.4.1
 six==1.15.0
 symspellpy==6.5.2
-tensorboard==1.14.0
-tensorflow==1.14.0
-tensorflow-estimator==1.14.0
+tensorboard==1.15.0
+tensorflow==1.15.2
+tensorflow-estimator==1.15.1
 termcolor==1.1.0
 threadpoolctl==2.1.0
 Werkzeug==1.0.1
