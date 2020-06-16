@@ -3,8 +3,7 @@ import numpy as np
 import numpy.linalg
 
 
-# Crop the segmented input from image and resize it to 32x(scaled width)
-def crop(image, box):
+def getOrderedPoints(box):
     # Box points are in arbitrary order so some fiddling is required
     # The code assumes that start of the name is always more left than the end of the name
     xs = box[:,0]
@@ -22,7 +21,14 @@ def crop(image, box):
     topleft = left1 if left1[1] < left2[1] else left2
     bottomleft = left2 if left1[1] < left2[1] else left1
     topright = right1 if right1[1] < right2[1] else right2
+    bottomright = right1 if right1[1] > right2[1] else right2
 
+    return topleft, bottomleft, topright, bottomright
+
+
+# Crop the segmented input from image and resize it to 32x(scaled width)
+def crop(image, box):
+    topleft, bottomleft, topright, bottomright = getOrderedPoints(box)
     height = np.linalg.norm(topleft-bottomleft)
     width = np.linalg.norm(topright-topleft)
     if height == 0 or width == 0:

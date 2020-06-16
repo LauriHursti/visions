@@ -1,5 +1,5 @@
 import cv2
-from os import path
+from os import path, makedirs
 import glob
 import numpy as np
 import io
@@ -8,48 +8,45 @@ import argparse
 from symspell import SymspellMTGNames
 from lstm_reader import LSTMClf
 from detector import Detector
-import crop
+from crop import crop, getOrderedPoints
 
-IMGS = 500
+
 FT_INPUT_W = 1024
 FT_INPUT_H = 1024
-COLORS = {
- 0: (230, 25, 75),
- 1: (60, 180, 75),
- 2: (255, 225, 25),
- 3: (0, 130, 200),
- 4: (245, 130, 48),
- 5: (145, 30, 180),
- 6: (70, 240, 240),
- 7: (240, 50, 230),
- 8: (210, 245, 60),
- 9: (250, 190, 190),
-}
 
 
-def boxes_to_res_file(imgname, labels_boxes):
-    name_wo_type = imgname.replace(".jpg", "")
-    lines = ""
-    for i, (_label, box, _threshold) in enumerate(labels_boxes):
-        res_pts = box.reshape(8).tolist()
-        separator = ", "
-        box_str_list = map(lambda x: str(x), res_pts)
-        box_str = separator.join(box_str_list)
-        newline = "\n" if i > 0 else ""
-        lines = lines + newline + box_str
+def drawBoxes(imgc, boxes, cards):
+    for i, box in enumerate(boxes):
+        card = cards[i]
 
-    output = io.open("outputs/" + name_wo_type + ".txt", "w", encoding="utf-8")
-    output.write(lines)
-    output.close()
+        text = card if len(card) != 0 else "-not recognized-"
+        _topleft, _bottomleft, topright, bottomright = getOrderedPoints(box)
+        # Calculate position for text output
+        origY = int((topright[1] + bottomright[1]) / 2)
+        origX = int((topright[0] + bottomright[0]) / 2) + 5
+        textOrig = (int(origX) + 5, int(origY))
+        size, _baseline = cv2.getTextSize(text, cv2.FONT_HERSHEY_DUPLEX, 1, 1)
+        w, h = size
+        pad = 4
+        top = max(0, (origY - h) - pad)
+        bottom = min(FT_INPUT_H, origY + pad)
+        left = max(0, origX - pad)
+        right = min(FT_INPUT_W, origX + w + pad)
 
+        # Create the text render
+        textbg = imgc[top:bottom, left:right]
+        whiteCanvas = np.empty_like(textbg)
+        whiteCanvas.fill(255)
+        merged = cv2.addWeighted(textbg, 0.3, whiteCanvas, 0.7, 1)
+        cv2.putText(merged, text, (pad, pad + h), cv2.FONT_HERSHEY_DUPLEX, 1, (15, 15, 15), 1)
 
-def printImageOutputs(imgc, imName, labels_boxes):
-    for _label, box,in boxes:
+        # Overlay text into the image
+        imgc[top:bottom, left:right] = merged
         cv2.drawContours(imgc, [box], 0, (255, 0, 255), 2, lineType=cv2.LINE_AA)
-    cv2.imwrite("outputs/" + imName + ".png", imgc)
+    return imgc        
 
 
-def makeSquare(img, grayScale=True):
+def squareResize(img, grayScale=True):
     if grayScale:
         ih, iw = img.shape
     else:
@@ -60,13 +57,13 @@ def makeSquare(img, grayScale=True):
         newH = int(scale * ih)
         newW = int(scale * iw)
         imgResized = cv2.resize(img, dsize=(newW, newH))
-        imgResized = cv2.copyMakeBorder(imgResized, 0, 0, 0, FT_INPUT_W - newW, cv2.BORDER_CONSTANT, (255, 255, 255))
+        imgResized = cv2.copyMakeBorder(imgResized, 0, 0, 0, FT_INPUT_W - newW, cv2.BORDER_CONSTANT)
     else:
         scale = FT_INPUT_W / iw
         newH = int(scale * ih)
         newW = int(scale * iw)
         imgResized = cv2.resize(img, dsize=(newW, newH))
-        imgResized = cv2.copyMakeBorder(imgResized, 0, FT_INPUT_H - newH, 0, 0, cv2.BORDER_CONSTANT, (255, 255, 255))
+        imgResized = cv2.copyMakeBorder(imgResized, 0, FT_INPUT_H - newH, 0, 0, cv2.BORDER_CONSTANT)
 
     if (grayScale):
         oh, ow = imgResized.shape
@@ -78,23 +75,28 @@ def makeSquare(img, grayScale=True):
     return imgResized
 
 
-def find_inputs():
-    return glob.glob("inputs/*.*")
+def findInputs(folder):
+    types = ["gif", "jpg", "jpeg", "tiff", "png", "webp", "bmp"]
+    collector = []
+    for ftype in types:
+        globExpression = folder + "/*." + ftype
+        collector.extend(glob.glob(globExpression))
+    return collector
 
 
-def recognize_card_names():
+def recognizeCardNames(inputFolder, outputFolder, printImages):
     sym = SymspellMTGNames()
     lstm = LSTMClf()
     detector = Detector()
     allResults = []
 
-    imgPaths = find_inputs()
+    imgPaths = findInputs(inputFolder)
     for imgPath in imgPaths:
         _dir, imgName = path.split(imgPath)
         img = cv2.imread(str(imgPath), cv2.IMREAD_GRAYSCALE)
         imgc = cv2.imread(str(imgPath))
-        img = makeSquare(img)
-        imgc = makeSquare(imgc, grayScale=False)
+        img = squareResize(img)
+        imgc = squareResize(imgc, grayScale=False)
         labels_boxes = detector.getNameBoxes(img, imgc)
 
         cards = []
@@ -103,9 +105,9 @@ def recognize_card_names():
         for _label, box in labels_boxes:
             cropped = None
             try:
-                cropped = crop.crop(img, box)
-                # Exception is thrown if the box has invalid size    
+                cropped = crop(img, box)
             except:
+                # Exception is thrown if the box has invalid size    
                 continue
 
             boxes.append(box)
@@ -120,14 +122,31 @@ def recognize_card_names():
                     if corrected != None:
                         cards[len(cards) - 1] = corrected
 
-        allResults.append((imgName, cards, boxes))
+        allResults.append((imgName, imgc, cards, boxes))
 
     return allResults
 
 
 if __name__ == "__main__":
-    results = recognize_card_names()
-    headers = ["Card name"]
-    for imgName, cards, boxes in results:
+    parser = argparse.ArgumentParser(description='Process some integers.')
+    parser.add_argument("--input", default="inputs", help="Folder that contains input images")
+    parser.add_argument("--printimages", default=1, help="Set to true if you want image outputs printed to the output folder")
+    parser.add_argument("--output", default="outputs", help="Folder where image outputs are written")
+
+    args = parser.parse_args()
+    inputFolder = args.input
+    outputFolder = args.output
+    printImages = bool(args.printimages)
+
+    if printImages:
+        makedirs(outputFolder, exist_ok=True)
+
+    results = recognizeCardNames(inputFolder, outputFolder, printImages)
+    for imgName, imgc, cards, boxes in results:
+        if printImages:
+            outputPath = outputFolder + "/out_" + imgName
+            imgc = drawBoxes(imgc, boxes, cards)
+            cv2.imwrite(outputFolder + "/" + imgName, imgc)
+            print("Output file written to", outputPath)
         print("Image: ", imgName)
         print(cards, "\n")
