@@ -20,7 +20,7 @@ The recognition is done by first detecting and then reading the card names in th
 
 This program is a constructive part of my master's thesis, which will be published some time during the summer of 2020. The thesis contains full details of the implementation in Finnish. A more detailed explanation in English might be added later as a GitHub page or in some other format.
 
-Datasets used in training the neural network models will be published in a separate Git repository.
+Datasets used for training the neural networks are published in [visions-datasets](https://github.com/LauriHursti/visions-datasets).
 
 ## Installation
 Since Python 3 can be too slow for calculation intensive operations, FASText and DBSCAN are implemented in C++. The following installation instructions have been tested on a fresh installation of Ubuntu 18.04 LTS.
