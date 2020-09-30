@@ -18,7 +18,7 @@ The recognition is done by first detecting and then reading the card names in th
 4. A [recurrent neural network](https://keras.io/examples/image_ocr/) containing an [LSTM unit](https://dl.acm.org/doi/10.1162/neco.1997.9.8.1735) is used to read the detected text.
 5. Language model using [SymSpell](https://medium.com/@wolfgarbe/1000x-faster-spelling-correction-algorithm-2012-8701fcd87a5f) matches raw results to card names to improve recognition results.
 
-This program is a constructive part of my master's thesis, which will be published some time during the summer of 2020. The thesis contains full details of the implementation in Finnish. A more detailed explanation in English might be added later as a GitHub page or in some other format.
+This program is a constructive part of my [master's thesis](https://trepo.tuni.fi/handle/10024/122734). The thesis contains full details of the implementation in Finnish. A more detailed explanation in English might be added later as a GitHub page or in some other format.
 
 Datasets used for training the neural networks are published in [visions-datasets](https://github.com/LauriHursti/visions-datasets).
 
